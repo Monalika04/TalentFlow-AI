@@ -1,70 +1,73 @@
-from sqlalchemy import String, Numeric
+from datetime import datetime
+from decimal import Decimal
+
+from sqlalchemy import ForeignKey, Numeric, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.models.base import Base
 
 
-class Candidate(Base):
-    __tablename__ = "candidate"
+class Resume(Base):
+    __tablename__ = "resume"
     __table_args__ = {"schema": "core"}
 
-    candidate_id: Mapped[int] = mapped_column(
+    resume_id: Mapped[int] = mapped_column(
         primary_key=True
     )
 
-    first_name: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
+    candidate_id: Mapped[int] = mapped_column(
+        ForeignKey("core.candidate.candidate_id"),
+        nullable=False,
     )
 
-    last_name: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
-    )
-
-    email: Mapped[str] = mapped_column(
+    file_name: Mapped[str] = mapped_column(
         String(255),
-        unique=True,
-        nullable=False
+        nullable=False,
     )
 
-    phone: Mapped[str] = mapped_column(
+    file_path: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
+    file_type: Mapped[str] = mapped_column(
         String(20),
-        unique=True,
-        nullable=False
+        nullable=False,
     )
 
-    city: Mapped[str] = mapped_column(
-        String(100),
-        nullable=False
-    )
-
-    years_experience: Mapped[float] = mapped_column(
-        Numeric(4, 1),
-        default=0
-    )
-
-    current_ctc: Mapped[float] = mapped_column(
+    file_size_kb: Mapped[Decimal] = mapped_column(
         Numeric(10, 2),
-        default=0
+        nullable=False,
     )
 
-    expected_ctc: Mapped[float] = mapped_column(
-        Numeric(10, 2),
-        default=0
+    resume_version: Mapped[int] = mapped_column(
+        nullable=False,
+        default=1,
     )
 
-    linkedin_url: Mapped[str | None] = mapped_column(
-        String(255),
-        nullable=True
+    upload_date: Mapped[datetime] = mapped_column(
+        server_default=func.now(),
+        nullable=False,
     )
 
-    github_url: Mapped[str | None] = mapped_column(
-        String(255),
-        nullable=True
-    )
-
-    status: Mapped[str] = mapped_column(
+    parsing_status: Mapped[str] = mapped_column(
         String(20),
-        default="ACTIVE"
+        nullable=False,
+        default="PENDING",
+    )
+
+    ai_summary: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )

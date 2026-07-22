@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from backend.dependencies.database import get_db
 from backend.schemas.candidate_schema import (
     CandidateCreate,
+    CandidateUpdate,
     CandidateListResponse,
     CandidateResponse,
 )
@@ -49,4 +50,47 @@ def search_candidates(
         city,
         status,
         search,
+    )
+
+
+@router.get(
+    "/{candidate_id}",
+    response_model=CandidateResponse,
+)
+def get_candidate(
+    candidate_id: int,
+    db: Session = Depends(get_db),
+):
+
+    return CandidateService(db).get_candidate_by_id(
+        candidate_id
+    )
+
+
+@router.put(
+    "/{candidate_id}",
+    response_model=CandidateResponse,
+)
+def update_candidate(
+    candidate_id: int,
+    candidate: CandidateUpdate,
+    db: Session = Depends(get_db),
+):
+
+    return CandidateService(db).update_candidate(
+        candidate_id,
+        candidate,
+    )
+
+
+@router.delete(
+    "/{candidate_id}",
+)
+def delete_candidate(
+    candidate_id: int,
+    db: Session = Depends(get_db),
+):
+
+    return CandidateService(db).delete_candidate(
+        candidate_id
     )

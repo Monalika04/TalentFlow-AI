@@ -72,3 +72,18 @@ class CandidateRepository:
         )
 
         return total, candidates
+    def get_by_id(self, candidate_id: int):
+
+        return (
+            self.db.query(Candidate)
+            .filter(Candidate.candidate_id == candidate_id)
+            .first()
+        )
+
+
+    def update(self):
+        self.db.commit()
+
+
+    def delete(self):
+        self.db.commit()
