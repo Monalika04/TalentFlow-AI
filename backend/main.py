@@ -17,6 +17,8 @@ from backend.api.ai_recommendation_api import (
 from backend.exceptions.handlers import (
     register_exception_handlers,
 )
+
+from backend.authentication.auth_api import router as auth_router
 from backend.api.recruiter_api import router as recruiter_router
 app = FastAPI(
     title="TalentFlow AI",
@@ -35,6 +37,7 @@ app.include_router(application_router)
 app.include_router(application_status_history_router)
 app.include_router(ai_recommendation_router)
 app.include_router(recruiter_router)
+app.include_router(auth_router)
 
 @app.get("/")
 def home():

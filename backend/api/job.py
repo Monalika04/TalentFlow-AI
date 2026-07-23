@@ -3,7 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
+from backend.authentication.permissions import require_recruiter
 from backend.dependencies.database import get_db
+from backend.models.recruiter_model import Recruiter
 from backend.schemas.job_schema import (
     JobCreate,
     JobUpdate,
@@ -26,6 +28,7 @@ router = APIRouter(
 def create_job(
     job: JobCreate,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
 ):
     return JobService(db).create_job(job)
 
@@ -43,15 +46,16 @@ def search_jobs(
     employment_type: str | None = None,
     search: str | None = None,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
 ):
     return JobService(db).search_jobs(
-        page,
-        page_size,
-        company_id,
-        department,
-        status,
-        employment_type,
-        search,
+        page=page,
+        page_size=page_size,
+        company_id=company_id,
+        department=department,
+        status=status,
+        employment_type=employment_type,
+        search=search,
     )
 
 
@@ -62,6 +66,7 @@ def search_jobs(
 def get_job(
     job_id: int,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
 ):
     return JobService(db).get_job_by_id(job_id)
 
@@ -74,10 +79,11 @@ def update_job(
     job_id: int,
     job: JobUpdate,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
 ):
     return JobService(db).update_job(
-        job_id,
-        job,
+        job_id=job_id,
+        job=job,
     )
 
 
@@ -87,5 +93,6 @@ def update_job(
 def delete_job(
     job_id: int,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
 ):
     return JobService(db).delete_job(job_id)

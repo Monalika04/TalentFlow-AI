@@ -14,7 +14,7 @@ from backend.schemas.recruiter_schema import (
     RecruiterCreate,
     RecruiterUpdate,
 )
-
+from backend.authentication.password import hash_password
 
 class RecruiterService:
 
@@ -43,7 +43,7 @@ class RecruiterService:
             first_name=request.first_name,
             last_name=request.last_name,
             email=request.email,
-            password_hash=request.password,   # Temporary
+            password_hash = hash_password(request.password),   # Temporary
             role=request.role,
             status=Status.ACTIVE.value,
         )

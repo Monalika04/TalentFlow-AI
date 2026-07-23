@@ -2,6 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
+from backend.authentication.permissions import require_admin
+from backend.models.recruiter_model import Recruiter
 
 from backend.dependencies.database import get_db
 from backend.schemas.recruiter_schema import (
@@ -25,6 +27,7 @@ router = APIRouter(
 def create_recruiter(
     request: RecruiterCreate,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_admin),
 ):
     service = RecruiterService(db)
     return service.create(request)
@@ -37,6 +40,7 @@ def create_recruiter(
 def get_recruiter(
     recruiter_id: int,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_admin),
 ):
     service = RecruiterService(db)
     return service.get_by_id(recruiter_id)
@@ -53,6 +57,7 @@ def search_recruiters(
     role: str | None = None,
     status: str | None = None,
     db: Session = Depends(get_db),
+current_recruiter: Recruiter = Depends(require_admin),
 ):
     service = RecruiterService(db)
 
@@ -73,6 +78,7 @@ def update_recruiter(
     recruiter_id: int,
     request: RecruiterUpdate,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_admin),
 ):
     service = RecruiterService(db)
 
@@ -88,6 +94,7 @@ def update_recruiter(
 def delete_recruiter(
     recruiter_id: int,
     db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_admin),
 ):
     service = RecruiterService(db)
 
