@@ -25,21 +25,41 @@ class CandidateRepository:
             .first()
         )
 
+    def get_by_id(self, candidate_id: int):
+
+        return (
+            self.db.query(Candidate)
+            .filter(Candidate.candidate_id == candidate_id)
+            .first()
+        )
+
     def create(self, candidate: Candidate):
 
         self.db.add(candidate)
-        self.db.commit()
+        self.db.flush()
         self.db.refresh(candidate)
 
         return candidate
 
+    def update(self, candidate: Candidate):
+
+        self.db.flush()
+        self.db.refresh(candidate)
+
+        return candidate
+
+    def delete(self, candidate: Candidate):
+
+        self.db.delete(candidate)
+        self.db.flush()
+
     def search(
         self,
-        page,
-        page_size,
-        city,
-        status,
-        search
+        page: int,
+        page_size: int,
+        city: str | None,
+        status: str | None,
+        search: str | None,
     ):
 
         query = self.db.query(Candidate)
@@ -55,7 +75,7 @@ class CandidateRepository:
                 or_(
                     Candidate.first_name.ilike(f"%{search}%"),
                     Candidate.last_name.ilike(f"%{search}%"),
-                    Candidate.email.ilike(f"%{search}%")
+                    Candidate.email.ilike(f"%{search}%"),
                 )
             )
 
@@ -72,18 +92,3 @@ class CandidateRepository:
         )
 
         return total, candidates
-    def get_by_id(self, candidate_id: int):
-
-        return (
-            self.db.query(Candidate)
-            .filter(Candidate.candidate_id == candidate_id)
-            .first()
-        )
-
-
-    def update(self):
-        self.db.commit()
-
-
-    def delete(self):
-        self.db.commit()

@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import ForeignKey, Numeric, String, Text, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.models.base import Base
 
@@ -70,4 +70,11 @@ class Resume(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+    
+    
+    ai_analyses: Mapped[list["ResumeAIAnalysis"]] = relationship(
+    "ResumeAIAnalysis",
+    back_populates="resume",
+    cascade="all, delete-orphan",
     )

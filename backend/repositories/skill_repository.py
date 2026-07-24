@@ -20,7 +20,7 @@ class SkillRepository:
     def create(self, skill: Skill):
 
         self.db.add(skill)
-        self.db.commit()
+        self.db.flush()
         self.db.refresh(skill)
 
         return skill
@@ -38,7 +38,7 @@ class SkillRepository:
         page: int,
         page_size: int,
         category: str | None,
-        status: str | None,
+        status: str |None,
         search: str | None,
     ):
 
@@ -69,8 +69,34 @@ class SkillRepository:
 
         return total, skills
 
-    def update(self):
-        self.db.commit()
+    def update(self, skill: Skill):
 
-    def delete(self):
-        self.db.commit()
+        self.db.flush()
+        self.db.refresh(skill)
+
+        return skill
+
+    def delete(self, skill: Skill):
+
+        self.db.delete(skill)
+        self.db.flush()
+        
+    def get_or_create(
+        self,
+        skill_name: str,
+    ) -> Skill:
+
+        skill = self.get_by_name(skill_name)
+
+        if skill:
+            return skill
+
+        skill = Skill(
+            skill_name=skill_name,
+        )
+
+        self.db.add(skill)
+        self.db.flush()
+        self.db.refresh(skill)
+
+        return skill

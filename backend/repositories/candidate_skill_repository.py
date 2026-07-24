@@ -23,14 +23,6 @@ class CandidateSkillRepository:
             .first()
         )
 
-    def create(self, candidate_skill: CandidateSkill):
-
-        self.db.add(candidate_skill)
-        self.db.commit()
-        self.db.refresh(candidate_skill)
-
-        return candidate_skill
-
     def get_by_id(self, candidate_skill_id: int):
 
         return (
@@ -39,6 +31,36 @@ class CandidateSkillRepository:
                 CandidateSkill.candidate_skill_id == candidate_skill_id
             )
             .first()
+        )
+
+    def create(self, candidate_skill: CandidateSkill):
+
+        self.db.add(candidate_skill)
+        self.db.flush()
+        self.db.refresh(candidate_skill)
+
+        return candidate_skill
+
+    def update(self, candidate_skill: CandidateSkill):
+
+        self.db.flush()
+        self.db.refresh(candidate_skill)
+
+        return candidate_skill
+
+    def delete(self, candidate_skill: CandidateSkill):
+
+        self.db.delete(candidate_skill)
+        self.db.flush()
+
+    def delete_by_candidate(self, candidate_id: int):
+
+        (
+            self.db.query(CandidateSkill)
+            .filter(
+                CandidateSkill.candidate_id == candidate_id
+            )
+            .delete(synchronize_session=False)
         )
 
     def search(
@@ -80,11 +102,23 @@ class CandidateSkillRepository:
         )
 
         return total, candidate_skills
+    def create_candidate_skill(
+        self,
+        candidate_id: int,
+        skill_id: int,
+        proficiency_level: str | None = None,
+        years_experience: float | None = None,
+        last_used: int | None = None,
+        is_primary: bool = False,
+    ):
 
-    def update(self):
-        self.db.commit()
+        candidate_skill = CandidateSkill(
+            candidate_id=candidate_id,
+            skill_id=skill_id,
+            proficiency_level=proficiency_level,
+            years_experience=years_experience,
+            last_used=last_used,
+            is_primary=is_primary,
+        )
 
-    def delete(self, candidate_skill: CandidateSkill):
-
-        self.db.delete(candidate_skill)
-        self.db.commit()
+        return self.create(candidate_skill)

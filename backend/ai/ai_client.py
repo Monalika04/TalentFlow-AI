@@ -24,7 +24,7 @@ class GeminiClient:
 
         self.client = genai.Client(api_key=api_key)
 
-        self.model = "gemini-2.5-flash"
+        self.model = "gemini-3.6-flash"
 
     def generate(self, prompt: str) -> ResumeAIResponse:
 

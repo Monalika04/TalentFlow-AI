@@ -12,7 +12,7 @@ class ResumeRepository:
     def create(self, resume: Resume):
 
         self.db.add(resume)
-        self.db.commit()
+        self.db.flush()
         self.db.refresh(resume)
 
         return resume
@@ -67,15 +67,18 @@ class ResumeRepository:
 
         return total, resumes
 
-    def update(self):
+    def update(self, resume: Resume):
 
-        self.db.commit()
+        self.db.flush()
+        self.db.refresh(resume)
+
+        return resume
 
     def delete(self, resume: Resume):
 
         self.db.delete(resume)
-        self.db.commit()
-        
+        self.db.flush()
+
     def get_latest_version(
         self,
         candidate_id: int,

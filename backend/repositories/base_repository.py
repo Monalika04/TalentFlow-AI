@@ -6,58 +6,27 @@ ModelType = TypeVar("ModelType")
 
 
 class BaseRepository(Generic[ModelType]):
-
-    def __init__(
-        self,
-        db: Session,
-        model: type[ModelType]
-    ):
+    def __init__(self, db: Session, model: type[ModelType]):
         self.db = db
         self.model = model
 
-    def get_all(self):
-
-        return (
-            self.db
-            .query(self.model)
-            .all()
-        )
-
-    def get_by_id(
-        self,
-        object_id: int
-    ):
-
-        primary_key = list(
-            self.model.__table__.primary_key.columns
-        )[0]
-
-        return (
-            self.db
-            .query(self.model)
-            .filter(primary_key == object_id)
-            .first()
-        )
-
-    def create(
-        self,
-        obj: ModelType
-    ):
-
+    def create(self, obj: ModelType) -> ModelType:
         self.db.add(obj)
-
-        self.db.commit()
-
+        self.db.flush()
         self.db.refresh(obj)
-
         return obj
 
-    def update(self):
+    def get_by_id(self, obj_id: int) -> ModelType | None:
+        return self.db.get(self.model, obj_id)
 
-        self.db.commit()
+    def get_all(self) -> list[ModelType]:
+        return self.db.query(self.model).all()
 
-    def delete(self, obj):
+    def update(self, obj: ModelType) -> ModelType:
+        self.db.flush()
+        self.db.refresh(obj)
+        return obj
 
+    def delete(self, obj: ModelType) -> None:
         self.db.delete(obj)
-
-        self.db.commit()
+        self.db.flush()
