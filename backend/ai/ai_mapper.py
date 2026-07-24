@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from backend.ai.parser_schema import (
@@ -22,9 +22,10 @@ class AIMapper:
 
     @staticmethod
     def _parse_date(value: str | None) -> Optional[date]:
-
         if not value:
             return None
+
+        value = value.strip()
 
         formats = (
             "%Y-%m-%d",
@@ -38,9 +39,9 @@ class AIMapper:
 
         for fmt in formats:
             try:
-                return date.strptime(value, fmt)
-            except Exception:
-                pass
+                return datetime.strptime(value, fmt).date()
+            except ValueError:
+                continue
 
         return None
 
@@ -52,11 +53,9 @@ class AIMapper:
     ) -> Candidate:
 
         if personal.full_name:
-
             names = personal.full_name.strip().split()
 
             candidate.first_name = names[0]
-
             candidate.last_name = (
                 " ".join(names[1:])
                 if len(names) > 1
@@ -90,20 +89,33 @@ class AIMapper:
         experience: AIExperience,
     ) -> Experience:
 
+        start_date = AIMapper._parse_date(
+            experience.start_date
+        )
+
+        end_date = AIMapper._parse_date(
+            experience.end_date
+        )
+
         return Experience(
             candidate_id=candidate_id,
             company_name=experience.company,
             job_title=experience.designation,
-            start_date=AIMapper._parse_date(
-                experience.start_date
-            ),
-            end_date=AIMapper._parse_date(
-                experience.end_date
-            ),
-            currently_working=experience.end_date is None,
+
+            # Required DB field
+            start_date=start_date or date(1900, 1, 1),
+
+            end_date=end_date,
+
+            currently_working=end_date is None,
+
             description="\n".join(
                 experience.responsibilities
             ),
+
+            # Optional fields
+            employment_type=None,
+            location=None,
         )
 
     @staticmethod

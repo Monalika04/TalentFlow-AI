@@ -365,15 +365,21 @@ class ResumeAIService:
                 skill = self.skill_repository.create(
                     skill
                 )
-
+                
             candidate_skill = CandidateSkill(
                 candidate_id=candidate_id,
                 skill_id=skill.skill_id,
-                proficiency_level=None,
-                years_experience=None,
+
+                # Required database fields
+                proficiency_level="INTERMEDIATE",
+                years_experience=0,
+
+                # Optional fields
                 last_used=None,
                 is_primary=False,
             )
+
+         
 
             self.candidate_skill_repository.create(
                 candidate_skill
