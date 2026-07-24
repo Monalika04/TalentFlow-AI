@@ -75,3 +75,20 @@ class ResumeRepository:
 
         self.db.delete(resume)
         self.db.commit()
+        
+    def get_latest_version(
+        self,
+        candidate_id: int,
+    ) -> int:
+
+        latest_version = (
+            self.db.query(
+                func.max(Resume.resume_version)
+            )
+            .filter(
+                Resume.candidate_id == candidate_id
+            )
+            .scalar()
+        )
+
+        return latest_version or 0
