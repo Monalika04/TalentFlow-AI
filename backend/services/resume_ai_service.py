@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from backend.ai.ai_client import GeminiClient
 from backend.ai.ai_mapper import AIMapper
@@ -491,3 +492,41 @@ class ResumeAIService:
             self.language_repository.create(
                 model
             )
+    
+  
+
+    def get_analysis(
+        self,
+        resume_id: int,
+    ):
+
+        analysis = (
+            self.analysis_repository.get_latest_by_resume(
+                resume_id
+            )
+        )
+
+        if analysis is None:
+            raise HTTPException(
+                status_code=404,
+                detail="AI analysis not found.",
+            )
+
+        response = analysis.ai_response_json or {}
+
+        return {
+            "analysis_id": analysis.analysis_id,
+            "resume_id": analysis.resume_id,
+            "model_name": analysis.model_name,
+            "prompt_version": analysis.prompt_version,
+            "analysis_version": analysis.analysis_version,
+            "status": analysis.status.value,
+            "execution_time_ms": analysis.execution_time_ms,
+            "facts": response.get("facts", {}),
+            "intelligence": response.get(
+                "intelligence",
+                {},
+            ),
+            "created_at": analysis.created_at,
+            "updated_at": analysis.updated_at,
+        }

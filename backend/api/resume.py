@@ -2,7 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-
+from backend.services.resume_ai_service import ResumeAIService
+from backend.schemas.resume_analysis_schema import ResumeAnalysisResponse
 from backend.dependencies.database import get_db
 from backend.schemas.resume_schema import (
     ResumeCreate,
@@ -52,6 +53,19 @@ def get_resumes(
         parsing_status=parsing_status,
         file_type=file_type,
     )
+    
+    
+@router.get(
+    "/{resume_id}/analysis",
+    response_model=ResumeAnalysisResponse,
+)
+def get_resume_analysis(
+    resume_id: int,
+    db: Session = Depends(get_db),
+):
+    service = ResumeAIService(db)
+
+    return service.get_analysis(resume_id)
 
 
 @router.get(

@@ -85,8 +85,8 @@ class ResumeUploadService:
         self.db.refresh(resume)
 
         try:
-
-            self.resume_ai_service.analyze_resume(
+            
+            ai_response = self.resume_ai_service.analyze_resume(
                 resume.resume_id
             )
 
@@ -97,9 +97,17 @@ class ResumeUploadService:
 
             resume.parsing_status = "COMPLETED"
 
+            resume.ai_summary = (
+                ai_response.intelligence.professional_summary
+            )
+
             self.resume_repository.update(resume)
 
             self.db.commit()
+            
+            
+
+
 
         except Exception as e:
 

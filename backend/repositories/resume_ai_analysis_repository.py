@@ -160,3 +160,18 @@ class ResumeAIAnalysisRepository:
             prompt_version=prompt_version,
             analysis_version=version,
         )
+        
+    def get_latest_by_resume(
+        self,
+        resume_id: int,
+    ):
+        return (
+            self.db.query(ResumeAIAnalysis)
+            .filter(
+                ResumeAIAnalysis.resume_id == resume_id
+            )
+            .order_by(
+                ResumeAIAnalysis.analysis_version.desc()
+            )
+            .first()
+        )
