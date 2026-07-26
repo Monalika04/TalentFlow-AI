@@ -7,7 +7,7 @@ from backend.models.resume_ai_analysis_model import (
     AIAnalysisStatus,
 )
 
-
+from backend.models.resume import Resume
 class ResumeAIAnalysisRepository:
 
     def __init__(self, db: Session):
@@ -175,3 +175,23 @@ class ResumeAIAnalysisRepository:
             )
             .first()
         )
+    
+    def get_latest_by_candidate(
+        self,
+        candidate_id: int,
+    ):
+        return (
+            self.db.query(ResumeAIAnalysis)
+            .join(
+                Resume,
+                Resume.resume_id == ResumeAIAnalysis.resume_id,
+            )
+            .filter(
+                Resume.candidate_id == candidate_id,
+            )
+            .order_by(
+                Resume.resume_version.desc(),
+                ResumeAIAnalysis.analysis_version.desc(),
+            )
+            .first()
+    )

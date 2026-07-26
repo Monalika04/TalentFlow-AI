@@ -1,5 +1,11 @@
+from typing import Type
+
+from pydantic import BaseModel
+
 from backend.ai.normalization import normalize_skill_list
-from backend.ai.parser_schema import ResumeAIResponse
+from backend.ai.parser_schema import (
+    ResumeAIResponse,
+)
 
 
 class ResponseValidator:
@@ -7,13 +13,21 @@ class ResponseValidator:
     def validate(
         self,
         response: dict,
-    ) -> ResumeAIResponse:
+        response_model: Type[BaseModel],
+    ):
 
-        validated = ResumeAIResponse.model_validate(response)
+        validated = response_model.model_validate(
+            response
+        )
 
-        self._normalize(validated)
-
-        self._validate_business_rules(validated)
+        if isinstance(
+            validated,
+            ResumeAIResponse,
+        ):
+            self._normalize(validated)
+            self._validate_business_rules(
+                validated
+            )
 
         return validated
 

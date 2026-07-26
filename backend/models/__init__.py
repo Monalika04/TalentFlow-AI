@@ -1,0 +1,1 @@
+from backend.models.job_ai_analysis_model import JobAIAnalysis

@@ -84,6 +84,7 @@ class SkillRepository:
     def get_or_create(
         self,
         skill_name: str,
+        category: str = "GENERAL",
     ) -> Skill:
 
         skill = self.get_by_name(skill_name)
@@ -93,6 +94,9 @@ class SkillRepository:
 
         skill = Skill(
             skill_name=skill_name,
+            category=category,
+            description=None,
+            status="ACTIVE",
         )
 
         self.db.add(skill)

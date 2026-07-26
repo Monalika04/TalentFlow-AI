@@ -36,14 +36,14 @@ class CandidateRepository:
     def create(self, candidate: Candidate):
 
         self.db.add(candidate)
-        self.db.flush()
+        self.db.commit()
         self.db.refresh(candidate)
 
         return candidate
 
     def update(self, candidate: Candidate):
 
-        self.db.flush()
+        self.db.commit()
         self.db.refresh(candidate)
 
         return candidate
@@ -51,7 +51,7 @@ class CandidateRepository:
     def delete(self, candidate: Candidate):
 
         self.db.delete(candidate)
-        self.db.flush()
+        self.db.commit()
 
     def search(
         self,

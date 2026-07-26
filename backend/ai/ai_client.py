@@ -2,10 +2,10 @@ import json
 import logging
 import time
 
+
 from google import genai
 from google.genai import types
 
-from backend.ai.parser_schema import ResumeAIResponse
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,10 @@ class GeminiClient:
 
         self.model = "gemini-3.6-flash"
 
-    def generate(self, prompt: str) -> ResumeAIResponse:
+    def generate(
+        self,
+        prompt: str,
+    ):
 
         last_exception = None
 
@@ -54,9 +57,7 @@ class GeminiClient:
 
                 cleaned = self._clean_response(response.text)
 
-                parsed = self._parse_json(cleaned)
-
-                return ResumeAIResponse.model_validate(parsed)
+                return self._parse_json(cleaned)
 
             except Exception as exc:
 

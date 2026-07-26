@@ -11,7 +11,9 @@ from backend.schemas.application_schema import (
     ApplicationListResponse,
 )
 from backend.services.application_service import ApplicationService
-
+from backend.services.candidate_matching_service import (
+    CandidateMatchingService,
+)
 router = APIRouter(
     prefix="/applications",
     tags=["Applications"],
@@ -64,7 +66,19 @@ def get_application(
 ):
     service = ApplicationService(db)
     return service.get_application_by_id(application_id)
+@router.post(
+    "/{application_id}/match",
+)
+def match_candidate(
+    application_id: int,
+    db: Session = Depends(get_db),
+):
 
+    service = CandidateMatchingService(db)
+
+    return service.match_candidate(
+        application_id
+    )
 
 @router.put(
     "/{application_id}",

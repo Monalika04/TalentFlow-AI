@@ -12,7 +12,18 @@ from backend.schemas.job_schema import (
     JobResponse,
     JobListResponse,
 )
+from backend.services.candidate_ranking_service import (
+    CandidateRankingService,
+)
+
+from backend.schemas.candidate_ranking_schema import (
+    CandidateRankingResponse,
+)
 from backend.services.job_service import JobService
+from backend.services.job_ai_service import JobAIService
+from backend.schemas.job_analysis_schema import (
+    JobAnalysisResponse,
+)
 
 router = APIRouter(
     prefix="/jobs",
@@ -70,7 +81,37 @@ def get_job(
 ):
     return JobService(db).get_job_by_id(job_id)
 
+@router.get(
+    "/{job_id}/analysis",
+    response_model=JobAnalysisResponse,
+)
+def get_job_analysis(
+    job_id: int,
+    db: Session = Depends(get_db),
+):
 
+    service = JobAIService(db)
+
+    return service.get_job_analysis(
+        job_id
+    )
+
+@router.get(
+    "/{job_id}/ranking",
+    response_model=CandidateRankingResponse,
+)
+def get_candidate_ranking(
+    job_id: int,
+    db: Session = Depends(get_db),
+    current_recruiter: Recruiter = Depends(require_recruiter),
+):
+
+    service = CandidateRankingService(db)
+
+    return service.get_job_ranking(
+        job_id
+    )
+    
 @router.put(
     "/{job_id}",
     response_model=JobResponse,

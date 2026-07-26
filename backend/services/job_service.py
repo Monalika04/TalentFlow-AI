@@ -10,34 +10,56 @@ from backend.schemas.job_schema import (
     JobUpdate,
     JobListResponse,
 )
-
+from backend.services.job_ai_service import JobAIService
 
 class JobService:
 
     def __init__(self, db):
         self.db = db
         self.repository = JobRepository(db)
+        self.job_ai_service = JobAIService(db)
 
     def create_job(
-        self,
-        data: JobCreate,
-    ):
+            self,
+            data: JobCreate,
+        ):
 
-        company = (
-            self.db.query(Company)
-            .filter(Company.company_id == data.company_id)
-            .first()
-        )
-
-        if not company:
-            raise HTTPException(
-                status_code=404,
-                detail="Company not found."
+            company = (
+                self.db.query(Company)
+                .filter(
+                    Company.company_id == data.company_id
+                )
+                .first()
             )
 
-        job = Job(**data.model_dump())
+            if not company:
 
-        return self.repository.create(job)
+                raise HTTPException(
+                    status_code=404,
+                    detail="Company not found.",
+                )
+
+            job = Job(
+                **data.model_dump()
+            )
+
+            job = self.repository.create(job)
+
+            try:
+
+                self.job_ai_service.analyze_job(
+                    job.job_id
+                )
+
+            except Exception as ex:
+
+                print("\n" + "=" * 80)
+                print("JOB AI FAILED")
+                print(type(ex).__name__)
+                print(str(ex))
+                print("=" * 80 + "\n")
+
+            return job
 
     def search_jobs(
         self,

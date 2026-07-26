@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from sqlalchemy import ForeignKey, Numeric, String, Text, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column
-
+from sqlalchemy.orm import relationship
 from backend.models.base import Base
 
 
@@ -86,4 +86,10 @@ class Job(Base):
         server_default=func.now(),
         onupdate=func.now(),
         nullable=False,
+    )
+    
+    ai_analyses: Mapped[list["JobAIAnalysis"]] = relationship(
+        "JobAIAnalysis",
+        back_populates="job",
+        cascade="all, delete-orphan",
     )

@@ -1,6 +1,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-
+from backend.models.candidate import Candidate
+from backend.models.ai_recommendation import AIRecommendation
 from backend.models.application import Application
 
 
@@ -93,3 +94,31 @@ class ApplicationRepository:
     ):
         self.db.delete(application)
         self.db.commit()
+        
+    def get_ranking_by_job(
+        self,
+        job_id: int,
+    ):
+
+        return (
+            self.db.query(
+                Application,
+                Candidate,
+                AIRecommendation,
+            )
+            .join(
+                Candidate,
+                Candidate.candidate_id == Application.candidate_id,
+            )
+            .join(
+                AIRecommendation,
+                AIRecommendation.application_id == Application.application_id,
+            )
+            .filter(
+                Application.job_id == job_id
+            )
+            .order_by(
+                AIRecommendation.overall_score.desc()
+            )
+            .all()
+        )

@@ -192,7 +192,8 @@ class ResumeAIService:
         )
 
         return self.response_validator.validate(
-            raw_json
+            raw_json,
+            ResumeAIResponse,
         )
     
     
@@ -276,24 +277,57 @@ class ResumeAIService:
             candidate.candidate_id,
             ai_response,
         )
-
     def _update_candidate_profile(
         self,
         candidate,
         ai_response: ResumeAIResponse,
     ):
 
+        personal = ai_response.facts.personal_information
+
         candidate = AIMapper.update_candidate(
             candidate=candidate,
-            personal=ai_response.facts.personal_information,
+            personal=personal,
             estimated_experience=(
                 ai_response.intelligence.estimated_years_of_experience
             ),
         )
 
-        self.candidate_repository.update(
-            candidate
-        )
+        # -------------------------
+        # Email
+        # -------------------------
+
+        if personal.email:
+
+            existing = self.candidate_repository.get_by_email(
+                str(personal.email)
+            )
+
+            if (
+                existing is None
+                or existing.candidate_id == candidate.candidate_id
+            ):
+                candidate.email = str(personal.email)
+
+        # -------------------------
+        # Phone
+        # -------------------------
+
+        if personal.phone:
+
+            existing = self.candidate_repository.get_by_phone(
+                personal.phone
+            )
+
+            if (
+                existing is None
+                or existing.candidate_id == candidate.candidate_id
+            ):
+                candidate.phone = personal.phone
+
+        self.candidate_repository.update(candidate)
+
+
     def _sync_skills(
         self,
         candidate_id: int,
@@ -350,22 +384,10 @@ class ResumeAIService:
         # Save skills
         for skill_name, category in unique_skills.items():
 
-            skill = self.skill_repository.get_by_name(
-                skill_name
-            )
-
-            if skill is None:
-
-                skill = Skill(
-                    skill_name=skill_name,
-                    category=category,
-                    description=None,
-                    status="ACTIVE",
-                )
-
-                skill = self.skill_repository.create(
-                    skill
-                )
+            skill = self.skill_repository.get_or_create(
+            skill_name,
+            category,
+        )
                 
             candidate_skill = CandidateSkill(
                 candidate_id=candidate_id,

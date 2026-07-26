@@ -22,6 +22,7 @@ class AIMapper:
 
     @staticmethod
     def _parse_date(value: str | None) -> Optional[date]:
+
         if not value:
             return None
 
@@ -38,8 +39,13 @@ class AIMapper:
         )
 
         for fmt in formats:
+
             try:
-                return datetime.strptime(value, fmt).date()
+                return datetime.strptime(
+                    value,
+                    fmt,
+                ).date()
+
             except ValueError:
                 continue
 
@@ -52,31 +58,50 @@ class AIMapper:
         estimated_experience: float,
     ) -> Candidate:
 
+        # -------------------------
+        # Name
+        # -------------------------
+
         if personal.full_name:
+
             names = personal.full_name.strip().split()
 
             candidate.first_name = names[0]
+
             candidate.last_name = (
                 " ".join(names[1:])
                 if len(names) > 1
                 else ""
             )
 
-        if personal.email:
-            candidate.email = str(personal.email)
+        # -------------------------
+        # DO NOT UPDATE EMAIL HERE
+        # ResumeAIService will do uniqueness checks.
+        # -------------------------
 
-        candidate.phone = personal.phone
+        # -------------------------
+        # DO NOT UPDATE PHONE HERE
+        # ResumeAIService will do uniqueness checks.
+        # -------------------------
 
         if personal.linkedin:
-            candidate.linkedin_url = str(personal.linkedin)
+            candidate.linkedin_url = str(
+                personal.linkedin
+            )
 
         if personal.github:
-            candidate.github_url = str(personal.github)
+            candidate.github_url = str(
+                personal.github
+            )
 
         if personal.portfolio:
-            candidate.portfolio_url = str(personal.portfolio)
+            candidate.portfolio_url = str(
+                personal.portfolio
+            )
 
-        candidate.total_experience = estimated_experience
+        candidate.total_experience = (
+            estimated_experience
+        )
 
         if personal.location:
             candidate.city = personal.location
@@ -101,19 +126,12 @@ class AIMapper:
             candidate_id=candidate_id,
             company_name=experience.company,
             job_title=experience.designation,
-
-            # Required DB field
             start_date=start_date or date(1900, 1, 1),
-
             end_date=end_date,
-
             currently_working=end_date is None,
-
             description="\n".join(
                 experience.responsibilities
             ),
-
-            # Optional fields
             employment_type=None,
             location=None,
         )

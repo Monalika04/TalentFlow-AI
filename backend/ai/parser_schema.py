@@ -167,3 +167,50 @@ class ResumeAIResponse(BaseModel):
     facts: ResumeFacts
 
     intelligence: ResumeIntelligence
+    
+# ==========================================================
+# JOB AI RESPONSE
+# ==========================================================
+
+class JobInformation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    job_title: str | None = None
+    department: str | None = None
+    employment_type: str | None = None
+    location: str | None = None
+
+
+class JobRequirements(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    minimum_experience: float | None = None
+    maximum_experience: float | None = None
+
+    education: List[str] = Field(default_factory=list)
+
+    mandatory_skills: List[str] = Field(default_factory=list)
+
+    preferred_skills: List[str] = Field(default_factory=list)
+
+
+class JobIntelligence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    difficulty: str
+
+    recommended_seniority: SeniorityLevel
+
+    estimated_market_demand: str
+
+
+class JobAIResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    job_information: JobInformation
+
+    requirements: JobRequirements
+
+    responsibilities: List[str] = Field(default_factory=list)
+
+    intelligence: JobIntelligence
