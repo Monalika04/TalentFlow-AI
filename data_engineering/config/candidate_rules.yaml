@@ -1,0 +1,17 @@
+experience:
+
+  junior_max: 2
+
+  mid_max: 5
+
+notice_period:
+
+  immediate_max: 30
+
+  short_max: 60
+
+salary_band:
+
+  low_max: 500000
+
+  medium_max: 1200000

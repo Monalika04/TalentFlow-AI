@@ -1,0 +1,84 @@
+dimensions:
+
+  dim_candidate:
+
+    source: candidates
+
+    columns:
+
+      - candidate_id
+      - candidate_name
+      - city
+      - state
+      - country
+      - experience_level
+      - salary_band
+      - notice_category
+      - highest_education
+      - status
+
+  dim_job:
+
+    source: jobs
+
+    columns:
+
+      - job_id
+      - company_id
+      - job_title
+      - department
+      - location
+      - employment_type
+      - min_experience
+      - max_experience
+      - min_salary
+      - max_salary
+      - vacancies
+      - status
+
+  dim_company:
+
+    source: companies
+
+    columns:
+
+    - company_id
+    - company_name
+    - industry
+    - company_size
+    - headquarters
+    - status
+
+facts:
+
+  fact_application:
+
+    source: applications
+
+    columns:
+
+      - application_id
+      - candidate_id
+      - job_id
+      - application_status
+      - source
+      - ai_match_score
+      - application_year
+      - application_month
+      - application_quarter
+
+  fact_ai_recommendation:
+
+    source: recommendations
+
+    columns:
+
+      - application_id
+      - overall_score
+      - skill_score
+      - experience_score
+      - education_score
+      - confidence_score
+      - recommendation
+      - overall_grade
+      - hiring_priority

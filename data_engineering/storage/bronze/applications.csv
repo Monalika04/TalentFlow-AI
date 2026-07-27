@@ -1,0 +1,4 @@
+application_id,candidate_id,job_id,application_date,application_status,ai_match_score,recruiter_notes,source,created_at,updated_at
+1,1,12,2026-07-20 14:47:06.389036,SCREENING,87.5,Strong SQL and Python skills. Shortlist for interview.,LinkedIn,2026-07-20 14:47:06.389036,2026-07-22 12:50:09.520955
+2,1,1,2026-07-26 14:01:42.602439,APPLIED,,,LinkedIn,2026-07-26 14:01:42.602439,2026-07-26 14:01:42.602439
+3,1,13,2026-07-26 14:06:57.577371,APPLIED,55.5,,LinkedIn,2026-07-26 14:06:57.577371,2026-07-26 14:20:49.829901

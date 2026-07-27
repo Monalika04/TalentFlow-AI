@@ -1,0 +1,13 @@
+match_grade:
+
+  A: 80
+
+  B: 70
+
+  C: 60
+
+confidence:
+
+  High: 90
+
+  Medium: 70

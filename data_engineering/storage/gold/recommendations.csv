@@ -1,0 +1,3 @@
+recommendation_id,application_id,overall_score,skill_score,experience_score,education_score,confidence_score,missing_skills,strengths,recommendation,reasoning,model_version,generated_at,match_grade,confidence_level,overall_grade,hiring_priority
+1,1,91.5,95.0,82.0,90.0,97.5,Apache Airflow,"Excellent SQL, Python and PostgreSQL skills",STRONG_MATCH,Candidate meets all mandatory skills and exceeds technical requirements. One optional skill is missing.,v1.0,2026-07-21 00:24:33.731532,A,High,Excellent,High
+2,3,55.5,30.0,25.0,100.0,95.0,"aws, docker, fastapi, rest apis, sqlalchemy","git, postgresql, python",NOT_RECOMMENDED,Candidate does not sufficiently match the required profile.,v1.0,2026-07-26 14:20:49.785324,D,High,Needs Improvement,Low

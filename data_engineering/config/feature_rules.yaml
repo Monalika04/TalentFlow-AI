@@ -1,0 +1,19 @@
+overall_grade:
+
+  excellent: 90
+
+  good: 75
+
+  average: 60
+
+hiring_priority:
+
+  high: 85
+
+  medium: 70
+
+application_age:
+
+  fresh: 7
+
+  recent: 30
