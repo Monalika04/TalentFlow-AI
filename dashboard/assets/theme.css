@@ -1,0 +1,396 @@
+/* ==========================================================
+   TALENTFLOW AI DESIGN SYSTEM
+   Version : 1.0
+   ========================================================== */
+
+
+/* ==========================================================
+   DESIGN TOKENS
+   ========================================================== */
+
+:root{
+
+    --primary:#2563EB;
+    --primary-hover:#1D4ED8;
+
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    --background:#0F172A;
+    --sidebar:#111827;
+    --surface:#1E293B;
+
+    --text:#F8FAFC;
+    --secondary:#94A3B8;
+
+    --border:#334155;
+
+    --radius:16px;
+
+}
+
+
+/* ==========================================================
+   STREAMLIT
+   ========================================================== */
+
+header{
+
+    visibility:hidden;
+
+}
+
+footer{
+
+    visibility:hidden;
+
+}
+
+#MainMenu{
+
+    visibility:hidden;
+
+}
+
+.stApp{
+
+    background:var(--background);
+
+}
+
+
+/* ==========================================================
+   SIDEBAR
+   ========================================================== */
+
+section[data-testid="stSidebar"]{
+
+    background:var(--sidebar);
+
+    border-right:1px solid var(--border);
+
+}
+
+section[data-testid="stSidebar"] *{
+
+    color:var(--text);
+
+}
+
+
+/* ==========================================================
+   TYPOGRAPHY
+   ========================================================== */
+
+.tf-title{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    color:var(--text);
+
+}
+
+.tf-subtitle{
+
+    font-size:18px;
+
+    color:var(--secondary);
+
+}
+
+.tf-section{
+
+    font-size:24px;
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
+
+.tf-description{
+
+    color:var(--secondary);
+
+    font-size:14px;
+
+}
+
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+
+.tf-hero{
+
+    background:linear-gradient(
+        90deg,
+        #2563EB,
+        #1D4ED8
+    );
+
+    border-radius:20px;
+
+    padding:28px;
+
+    color:white;
+
+    margin-bottom:25px;
+
+}
+
+
+/* ==========================================================
+   CARD
+   ========================================================== */
+
+.tf-card{
+
+    background:var(--surface);
+
+    border-radius:16px;
+
+    border:1px solid var(--border);
+
+    padding:20px;
+
+    box-shadow:
+        0px 8px 20px rgba(0,0,0,.25);
+
+    transition:.25s;
+
+}
+
+.tf-card:hover{
+
+    transform:translateY(-4px);
+
+    border:1px solid var(--primary);
+
+}
+
+
+/* ==========================================================
+   KPI
+   ========================================================== */
+
+.tf-kpi-title{
+
+    color:var(--secondary);
+
+    font-size:14px;
+
+}
+
+.tf-kpi-value{
+
+    font-size:34px;
+
+    color:white;
+
+    font-weight:700;
+
+}
+
+.tf-kpi-trend{
+
+    color:var(--success);
+
+    font-size:13px;
+
+}
+
+.tf-chip{
+
+    display:inline-block;
+
+    padding:4px 10px;
+
+    border-radius:30px;
+
+    background:#0B5ED7;
+
+    color:white;
+
+    font-size:12px;
+
+}
+
+
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+.stButton>button{
+
+    border-radius:10px;
+
+    background:var(--primary);
+
+    color:white;
+
+    border:none;
+
+    transition:.2s;
+
+}
+
+.stButton>button:hover{
+
+    background:var(--primary-hover);
+
+}
+
+
+/* ==========================================================
+   INPUT
+   ========================================================== */
+
+.stTextInput input{
+
+    border-radius:10px;
+
+}
+
+.stSelectbox div{
+
+    border-radius:10px;
+
+}
+
+
+/* ==========================================================
+   TABLE
+   ========================================================== */
+
+[data-testid="stDataFrame"]{
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+}
+
+
+/* ==========================================================
+   ALERTS
+   ========================================================== */
+
+.tf-alert-success{
+
+    background:#052E16;
+
+    border-left:6px solid var(--success);
+
+    padding:18px;
+
+    border-radius:12px;
+
+}
+
+.tf-alert-warning{
+
+    background:#422006;
+
+    border-left:6px solid var(--warning);
+
+    padding:18px;
+
+    border-radius:12px;
+
+}
+
+.tf-alert-danger{
+
+    background:#450A0A;
+
+    border-left:6px solid var(--danger);
+
+    padding:18px;
+
+    border-radius:12px;
+
+}
+
+
+/* ==========================================================
+   CHART CONTAINER
+   ========================================================== */
+
+.tf-chart{
+
+    background:var(--surface);
+
+    border-radius:16px;
+
+    border:1px solid var(--border);
+
+    padding:18px;
+
+}
+
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+
+.tf-footer{
+
+    text-align:center;
+
+    color:var(--secondary);
+
+    padding:25px;
+
+    font-size:13px;
+
+}
+
+
+/* ==========================================================
+   SCROLLBAR
+   ========================================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media(max-width:900px){
+
+.tf-title{
+
+font-size:28px;
+
+}
+
+.tf-section{
+
+font-size:20px;
+
+}
+
+.tf-kpi-value{
+
+font-size:26px;
+
+}
+
+}
