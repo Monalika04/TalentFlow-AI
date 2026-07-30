@@ -270,3 +270,249 @@ def companies_by_industry():
     """
 
     return db.dataframe(query)
+
+
+# ==========================================================
+# RECRUITMENT SOURCE ANALYSIS
+# ==========================================================
+
+def applications_by_source():
+
+    query = f"""
+    SELECT
+
+        source,
+
+        COUNT(*) AS total_applications
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    GROUP BY
+
+        source
+
+    ORDER BY
+
+        total_applications DESC
+    """
+
+    return db.dataframe(query)
+
+
+# ==========================================================
+# AI SCORE DISTRIBUTION
+# ==========================================================
+
+def ai_score_distribution():
+
+    query = f"""
+    SELECT
+
+        CASE
+
+            WHEN ai_match_score >= 90 THEN 'Excellent'
+
+            WHEN ai_match_score >= 75 THEN 'Good'
+
+            WHEN ai_match_score >= 60 THEN 'Average'
+
+            WHEN ai_match_score IS NULL THEN 'Not Evaluated'
+
+            ELSE 'Low'
+
+        END AS score_band,
+
+        COUNT(*) AS total
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    GROUP BY
+
+        score_band
+
+    ORDER BY
+
+        total DESC
+    """
+
+    return db.dataframe(query)
+
+
+# ==========================================================
+# APPLICATION AGING
+# ==========================================================
+
+def application_aging():
+
+    query = f"""
+    SELECT
+
+        application_bucket,
+
+        COUNT(*) AS total
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    GROUP BY
+
+        application_bucket
+
+    ORDER BY
+
+        total DESC
+    """
+
+    return db.dataframe(query)
+
+
+# ==========================================================
+# MONTHLY APPLICATION TREND
+# ==========================================================
+
+def monthly_application_trend():
+
+    query = f"""
+    SELECT
+
+        application_month,
+
+        COUNT(*) AS total_applications
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    GROUP BY
+
+        application_month
+
+    ORDER BY
+
+        MIN(application_date)
+    """
+
+    return db.dataframe(query)
+
+
+# ==========================================================
+# TOP AI MATCHED CANDIDATES
+# ==========================================================
+
+def top_ai_candidates():
+
+    query = f"""
+    SELECT
+
+        candidate_id,
+
+        job_id,
+
+        ai_match_score,
+
+        application_status
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    WHERE
+
+        ai_match_score IS NOT NULL
+
+    ORDER BY
+
+        ai_match_score DESC
+
+    LIMIT 10
+    """
+
+    return db.dataframe(query)
+
+
+
+# ==========================================================
+# HIRING FUNNEL
+# ==========================================================
+
+def hiring_funnel():
+
+    query = f"""
+    SELECT
+
+        application_status,
+
+        COUNT(*) AS total
+
+    FROM
+
+        {db.gold_table("applications")}
+
+    GROUP BY
+
+        application_status
+
+    ORDER BY
+
+        total DESC
+    """
+
+    return db.dataframe(query)
+
+
+
+# ==========================================================
+# RECRUITMENT HEALTH
+# ==========================================================
+
+def recruitment_health():
+
+    query = f"""
+    SELECT
+
+        COUNT(*) AS total_applications,
+
+        ROUND(
+            AVG(ai_match_score),
+            2
+        ) AS average_ai_score,
+
+        SUM(
+
+            CASE
+
+                WHEN application_status='HIRED'
+
+                THEN 1
+
+                ELSE 0
+
+            END
+
+        ) AS hired,
+
+        SUM(
+
+            CASE
+
+                WHEN application_status='REJECTED'
+
+                THEN 1
+
+                ELSE 0
+
+            END
+
+        ) AS rejected
+
+    FROM
+
+        {db.gold_table("applications")}
+    """
+
+    return db.dataframe(query)

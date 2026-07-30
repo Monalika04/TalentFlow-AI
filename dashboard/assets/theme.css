@@ -394,3 +394,173 @@ font-size:26px;
 }
 
 }
+
+
+/* ==========================================================
+   KPI CARD
+========================================================== */
+
+.tf-kpi-card{
+
+    background:var(--surface);
+
+    border-radius:18px;
+
+    border:1px solid var(--border);
+
+    border-top:5px solid var(--primary);
+
+    padding:20px;
+
+    transition:.25s;
+
+    height:100%;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.18);
+
+}
+
+.tf-kpi-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 16px 28px rgba(0,0,0,.28);
+
+}
+
+.tf-kpi-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.tf-kpi-title{
+
+    color:var(--secondary);
+
+    font-size:14px;
+
+}
+
+.tf-kpi-value{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    margin-top:12px;
+
+    margin-bottom:10px;
+
+}
+
+.tf-chip{
+
+    padding:4px 12px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.tf-chip-success{
+
+    background:#14532D;
+
+    color:#BBF7D0;
+
+}
+
+.tf-chip-warning{
+
+    background:#78350F;
+
+    color:#FDE68A;
+
+}
+
+.tf-chip-danger{
+
+    background:#7F1D1D;
+
+    color:#FECACA;
+
+}
+
+.tf-progress{
+
+    width:100%;
+
+    height:8px;
+
+    background:#334155;
+
+    border-radius:10px;
+
+    margin-top:12px;
+
+}
+
+.tf-progress-fill{
+
+    height:100%;
+
+    border-radius:10px;
+
+    background:linear-gradient(90deg,#2563EB,#60A5FA);
+
+}
+
+.tf-kpi-footer{
+
+    margin-top:15px;
+
+    color:var(--secondary);
+
+    font-size:13px;
+
+}
+
+/* ==========================================================
+   HEALTH HERO
+========================================================== */
+
+.tf-hero{
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #1D4ED8
+    );
+
+    border-radius:22px;
+
+    padding:30px;
+
+    color:white;
+
+    margin-bottom:20px;
+
+    box-shadow:0 12px 24px rgba(0,0,0,.25);
+
+}
+
+.tf-hero h2,
+.tf-hero h4{
+
+    color:white;
+
+}
+
+.tf-hero p{
+
+    color:#E2E8F0;
+
+}
